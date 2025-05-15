@@ -1,0 +1,19 @@
+{
+  "name": "mcp-template-server",
+  "version": "0.1.0",
+  "description": "MCP server template.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "mcp-template": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.2",
+    "nanoid": "^5.1.5",
+    "zod": "^3.22.4",
+    "zod-to-json-schema": "^3.23.5"
+  }
+}
