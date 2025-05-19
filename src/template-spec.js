@@ -22,11 +22,11 @@ export const makeResult = (v) => ({
   ],
 });
 
-/* ───────── example parameter schema (edit / duplicate / delete) ── */
+/* ───────── example parameter-shape (edit / duplicate / delete) ─── */
 
-const ExampleShape = z.object({
+const ExampleShape = {
   message: z.string().describe('Any message you want echoed back.'),
-});
+};
 
 /* ───────── spec object ─────────────────────────────────────────── */
 
@@ -40,7 +40,7 @@ export const spec = {
     {
       name       : 'echo',
       description: 'Return whatever message you send.',
-      parameters : ExampleShape,   // Zod object
+      parameters : ExampleShape,   // raw Zod shape (NOT z.object)
       async execute({ message }) {
         return makeResult(`You said: ${message}`);
       },
@@ -50,7 +50,7 @@ export const spec = {
     {
       name       : '__TOOL_NAME__',
       description: '__WHAT_THE_TOOL_DOES__',
-      parameters : z.object({ /* …parameter schema… *\/ }),
+      parameters : { /* …parameter Zod shape… *\/ },
       async execute(args) {
         // …tool logic…
         return makeResult('__RESPONSE__');
