@@ -1,7 +1,8 @@
 import { McpServer }            from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import path   from 'node:path';
-import url    from 'node:url';
+import { z }                    from 'zod';
+import path                     from 'node:path';
+import url                      from 'node:url';
 
 /* normalise any return value to proper MCP result -------------------- */
 const asResult = (v) =>
@@ -9,8 +10,14 @@ const asResult = (v) =>
     ? v
     : { content: [{ type: 'text', text: String(v) }] };
 
-/* pluck Zod-shape or keep JSON-Schema wrapper ------------------------ */
-const extractShape = (p) => (p?.vendor ? p.schema : p);
+/* convert whatever “parameters” is into a proper Zod type ------------ */
+const extractShape = (p) => {
+  if (!p) return undefined;                 // no parameters
+  if (p.vendor) return p.schema;            // { vendor:'json-schema', schema:{…} }
+  if (typeof p?.safeParse === 'function')   // already a Zod type
+    return p;
+  return z.object(p);                       // plain shape → z.object(...)
+};
 
 /* ──────────────────────── core class ─────────────────────────────── */
 export class SpecServer {
